@@ -13,3 +13,14 @@ services:
         - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
     ports:
       - "${MYSQL_PORT}:3306"
+
+  ### Redis ################################################
+  redis:
+    build:
+      context: ./redis
+      args:
+        - REDIS_VERSION=${REDIS_VERSION}
+    volumes:
+      - ${DATA_PATH_HOST}/redis:/data
+    ports:
+      - "${REDIS_PORT}:6379"
