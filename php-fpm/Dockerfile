@@ -54,6 +54,15 @@ RUN set -xe; \
       docker-php-ext-install zip && \
       php -m | grep -q 'zip'
 
+###########################################################################
+# Set Timezone
+###########################################################################
+
+ARG TZ=UTC
+ENV TZ ${TZ}
+
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 #
 #--------------------------------------------------------------------------
 # Optional Software's Installation
@@ -757,8 +766,8 @@ RUN set -xe; php -v | head -n 1 | grep -q "PHP ${LARADOCK_PHP_VERSION}."
 #--------------------------------------------------------------------------
 #
 #
-RUN mkdir -p /var/log/php
-VOLUME /var/log/php
+RUN mkdir -p /var/log/php-fpm
+VOLUME /var/log/php-fpm
 
 COPY ./pool/www.conf /usr/local/etc/php-fpm.d/
 
