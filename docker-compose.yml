@@ -39,7 +39,7 @@ services:
     environment:
       - TZ=${TIMEZONE}
     volumes:
-      - ${DATA_PATH_HOST}/www:/var/www
+      - ${WWW_PATH_HOST}:/var/www
       - ${LOG_PATH_HOST}/nginx:/var/log/nginx
       - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
       - ${NGINX_SSL_PATH}:/etc/nginx/ssl
@@ -108,7 +108,7 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
-      - ${DATA_PATH_HOST}/www:/var/www
+      - ${WWW_PATH_HOST}:/var/www
       - ${LOG_PATH_HOST}/php-fpm:/var/log/php-fpm
     expose:
       - "9000"
@@ -179,7 +179,20 @@ services:
     environment:
       - TZ=${TIMEZONE}
     volumes:
-      - ${DATA_PATH_HOST}/www:/var/www
+      - ${WWW_PATH_HOST}:/var/www
       #- ./workspace/supervisord.d:/etc/supervisord.d
     ports:
       - "10022:22"
+  ### RabbitMQ #############################################
+  rabbitmq:
+    build: ./rabbitmq
+    ports:
+      - "${RABBITMQ_NODE_HOST_PORT}:5672"
+      - "${RABBITMQ_MANAGEMENT_HTTP_HOST_PORT}:15672"
+      - "${RABBITMQ_MANAGEMENT_HTTPS_HOST_PORT}:15671"
+    privileged: true
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    volumes:
+      - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq
