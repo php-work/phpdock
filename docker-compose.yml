@@ -44,10 +44,7 @@ services:
       - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
       - ${NGINX_SSL_PATH}:/etc/nginx/ssl
     ports:
-      - "10080:80"
-      - "10081:81"
-      - "10082:82"
-      - "10083:83"
+      - "10080-10099:80-99"
       - "10443:443"
     depends_on:
       - php-fpm
