@@ -259,6 +259,20 @@ RUN if [ ${INSTALL_GMP} = true ]; then \
 ;fi
 
 ###########################################################################
+# UUID:
+###########################################################################
+
+USER root
+
+ARG INSTALL_UUID=false
+ARG PHP_VERSION=${LARADOCK_PHP_VERSION}
+
+RUN if [ ${INSTALL_UUID} = true ]; then \
+  # Install the PHP UUID extension
+  apt-get -y install php${LARADOCK_PHP_VERSION}-uuid \
+;fi
+
+###########################################################################
 # SOAP:
 ###########################################################################
 
