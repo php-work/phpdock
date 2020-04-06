@@ -828,7 +828,8 @@ RUN if [ ${INSTALL_SYMFONY} = true ]; then \
 ARG INSTALL_PYTHON=false
 
 RUN if [ ${INSTALL_PYTHON} = true ]; then \
-  apt-get -y install python python-pip python-dev build-essential  \
+  add-apt-repository ppa:jonathonf/python-3.6 \
+  && apt-get -y install python python-pip python-dev build-essential  \
   && python -m pip install --upgrade pip  \
   && python -m pip install --upgrade virtualenv \
 ;fi
@@ -853,14 +854,15 @@ RUN if [ ${INSTALL_POWERLINE} = true ]; then \
 ###########################################################################
 ARG INSTALL_SUPERVISOR=false
 
+COPY supervisord.conf /etc/supervisord.conf
+
 RUN if [ ${INSTALL_SUPERVISOR} = true ]; then \
     if [ ${INSTALL_PYTHON} = true ]; then \
-    python -m pip install --upgrade supervisor && \
-    echo_supervisord_conf > /etc/supervisord.conf && \
-    sed -i 's/\;\[include\]/\[include\]/g' /etc/supervisord.conf && \
-    sed -i 's/\;files\s.*/files = supervisord.d\/*.conf/g' /etc/supervisord.conf \
+    python -m pip install --upgrade supervisor \
   ;fi \
 ;fi
+
+ENTRYPOINT ["supervisord", "-n", "-c",  "/etc/supervisord.conf"]
 
 USER laradock
 

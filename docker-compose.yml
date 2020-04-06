@@ -179,7 +179,7 @@ services:
       - TZ=${TIMEZONE}
     volumes:
       - ${WWW_PATH_HOST}:/var/www
-      #- ./workspace/supervisord.d:/etc/supervisord.d
+      - ./workspace/supervisord.d:/etc/supervisord.d
     ports:
       - "10022:22"
   ### RabbitMQ #############################################
